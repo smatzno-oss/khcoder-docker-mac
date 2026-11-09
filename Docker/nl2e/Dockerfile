@@ -99,8 +99,12 @@ RUN update-locale LANG=ja_JP.UTF-8
 
 COPY mecabrc /etc/mecabrc
 RUN cpanm Lingua::JA::Regular::Unicode Statistics::ChisqIndep
-RUN Rscript -e 'install.packages(c("ggnetwork", "som", "topicmodels"))'
 
+# R 3.6.3 互換リポジトリ（Posit スナップショット）から proxy, ggnetwork 等を導入
+RUN Rscript -e 'options(repos = c(CRAN = "https://packagemanager.posit.co/cran/2020-12-31")); \
+    install.packages("proxy", dependencies = FALSE); \
+    install.packages(c("som", "topicmodels", "ggnetwork"), dependencies = TRUE)'
+    
 RUN cpanm DOY/Spreadsheet-ParseXLSX-0.17.tar.gz
 RUN Rscript -e 'install.packages("http://cran.r-project.org/src/contrib/Archive/ggplot2/ggplot2_2.2.1.tar.gz", repos=NULL, type="source")'
 
