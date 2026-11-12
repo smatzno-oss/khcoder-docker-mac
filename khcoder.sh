@@ -4,7 +4,7 @@ cd "$(dirname "$0")"
 
 # 0. 最初にDockerを起動
 open -a Docker
-sleep 1
+sleep 2
 
 # 1. XQuartz の起動確認（未起動なら起動）
 open -a XQuartz
