@@ -110,4 +110,11 @@ RUN Rscript -e 'install.packages("http://cran.r-project.org/src/contrib/Archive/
 
 COPY entrypoint.sh /
 
+# 医療用カスタム辞書（3種）のコピーと mecabrc への登録
+COPY medicaldics /usr/local/share/mecab/dic/medicaldics
+RUN for f in $(find / -name "mecabrc" 2>/dev/null); do \
+      sed -i '/^userdic[[:space:]]*=/d' "$f" && \
+      echo "userdic = /usr/local/share/mecab/dic/medicaldics/comejisyo_kh.dic,/usr/local/share/mecab/dic/medicaldics/hyakuyaku_kh.dic,/usr/local/share/mecab/dic/medicaldics/manbyo_kh.dic" >> "$f"; \
+    done
+    
 CMD ["/entrypoint.sh"]
